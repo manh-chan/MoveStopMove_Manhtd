@@ -9,8 +9,8 @@ using UnityEngine.SocialPlatforms.Impl;
 public class LevelManager : Singleton<LevelManager>
 {
     public int numberOfBots = 5;
-    public float respawnDelay = 3f;
     public int totalRank = 20;
+    public float respawnDelay = 3f;
     public Transform spawnArea;
     public List<GameObject> listEnemies = new List<GameObject>();
     public OffscreenIndicators indicators;
@@ -47,8 +47,8 @@ public class LevelManager : Singleton<LevelManager>
     {
         totalRank --;
         SimplePool.Despawn(enemy.GetComponent<Enemys>());
-        StartCoroutine(RespawnEnemyAfterDelay());
         indicators.RemoveTarget(enemy);
+        StartCoroutine(RespawnEnemyAfterDelay());
     }
 
     private IEnumerator RespawnEnemyAfterDelay()
@@ -67,7 +67,6 @@ public class LevelManager : Singleton<LevelManager>
             if (enemy != null)
             {
                 indicators.RemoveTarget(enemy);
-                SimplePool.Despawn(enemy.GetComponent<Enemys>());
             }
         }
         listEnemies.Clear();

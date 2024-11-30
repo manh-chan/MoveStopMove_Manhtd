@@ -48,6 +48,7 @@ public class GameManager : Singleton<GameManager>
     }
     private void HandleStartGame()
     {
+        LevelManager.Instance.ResetGame();
         UIManager.Instance.Open<CanvasMainMenu>();
         coinTxt.text = DataManager.Instance.CoinData.ToString();
     }

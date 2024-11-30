@@ -36,6 +36,7 @@ public class Bullet : GameUnit
             if (_character is Player player)
             {
                 player.CoinPlayer++;
+                FollowCamera.Instance.offest = new Vector3(FollowCamera.Instance.offest.x, FollowCamera.Instance.offest.y+0.5f, -FollowCamera.Instance.offest.y+0.3f);
                 DataManager.Instance.CoinData += player.CoinPlayer;
                 DataManager.Instance.SaveCoinPlayerData(DataManager.Instance.CoinData);
             }

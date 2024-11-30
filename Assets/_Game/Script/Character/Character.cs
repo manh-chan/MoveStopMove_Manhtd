@@ -23,9 +23,11 @@ public class Character : GameUnit
     public Weapon weapon;
     public Animator anim;
     public Transform posWeaponSpawn;
-    public GameObject rangePre;
+    public GameObject modelPlayer;
+    public GameObject roundAttack;
+    public GameObject targetPos;
     public WeaponType weaponType;
-
+    
     protected bool isAttacking;
     protected float shootDelay = 1f;
     protected float shootTime = 0f;
@@ -38,11 +40,10 @@ public class Character : GameUnit
     private Collider[] hitColliders = new Collider[20];
     private GameObject currentWeapon;
     private GameObject weaponPre;
-    private GameObject roundAttack;
     private Weapon weponSpawn;
     private Hat hatSpawn;
     private Vector3 currentDir;
-
+    
     public Weapon WeponSpawn { get => weponSpawn; set => weponSpawn = value; }
     public Transform FirePos { get => firePos; set => firePos = value; }
     public Hat HatSpawn { get => hatSpawn; set => hatSpawn = value; }
@@ -50,7 +51,6 @@ public class Character : GameUnit
     private void Start()
     {
         OnInit();
-        roundAttack = Instantiate(rangePre, transform);
         skin.rotation = Quaternion.identity;
     }
     private void OnEnable()
@@ -62,10 +62,14 @@ public class Character : GameUnit
     }
     public virtual void OnInit()
     {
+        int newLayer = LayerMask.NameToLayer(Constants.LAYER_ENEMY);
+
         currentAnim = Constants.ANIM_IDEL;
         isAttacking = false;
-        int newLayer = LayerMask.NameToLayer(Constants.LAYER_ENEMY);
         gameObject.layer = newLayer;
+        modelPlayer.transform.localScale = new Vector3(1, 1, 1);
+        roundAttack.transform.localScale = new Vector3(1.2f, 1.2f, 1.2f);
+        ChangeAnim(Constants.ANIM_IDEL);
     }
     protected virtual void ChangeWeapon(WeaponType weaponType)
     {
@@ -94,8 +98,7 @@ public class Character : GameUnit
         if (isAttacking) return;
         Vector3 directionToEnemy = FindTarget(transform.position, rangeAttack);
         Quaternion targetRotation = Quaternion.LookRotation(directionToEnemy);
-        Quaternion yRotation = Quaternion.Euler(0, targetRotation.eulerAngles.y, 0);
-        transform.rotation = yRotation;
+        transform.rotation = targetRotation;
         shootTime += Time.deltaTime;
         if (shootTime < shootDelay) return;
         shootTime = 0;
@@ -139,7 +142,11 @@ public class Character : GameUnit
                 nearestEnemy = hitColliders[i];
             }
         }
-        if (nearestEnemy != null) return (nearestEnemy.transform.position - position).normalized;
+        if (nearestEnemy != null) {
+            targetPos.SetActive(true);
+            return (nearestEnemy.transform.position - position).normalized;
+        }
+        targetPos.SetActive(false);
         return Vector3.zero;
     }
     public void ChangeAnim(string animName)
@@ -151,10 +158,11 @@ public class Character : GameUnit
             anim.SetTrigger(currentAnim);
         }
     }
-    public void UpSize()
+    public virtual void UpSize()
     {
         rangeAttack += 0.2f;
         roundAttack.transform.localScale *= 1.1f;
+        modelPlayer.transform.localScale *= 1.1f;
         score += 1;
     }
     public Vector3 CheckGround(Vector3 nextPoint)

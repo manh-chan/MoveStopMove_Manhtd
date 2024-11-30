@@ -12,9 +12,9 @@ public class CanvasVictory : UICanvas
     }
     public void ContinueButton()
     {
-        LevelManager.Instance.ResetGame();
         UIManager.Instance.CloseAll();
         UIManager.Instance.Open<CanvasMainMenu>();
+        GameManager.Instance.UpdateGameState(GameManager.GameState.StartGame);
     }
 }
 

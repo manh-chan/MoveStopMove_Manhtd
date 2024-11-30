@@ -21,6 +21,7 @@ public class Player : Character
     {
         if (isDead) return;
         PlayerMove();
+        
         if (Input.GetAxis("Fire1") != 1) PlayerAttack();
     }
 
@@ -31,11 +32,10 @@ public class Player : Character
         speedMove = 2f;
         pantType = DataManager.Instance.GetPlayerData().pantTypeData;
         gameObject.transform.position = Vector3.zero;
-
+        FollowCamera.Instance.OnInit();
         base.OnInit();
         ChangeItems();
         ChangePant(pantType);
-
     }
 
     private void PlayerAttack()

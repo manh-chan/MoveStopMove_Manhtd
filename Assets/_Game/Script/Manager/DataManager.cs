@@ -39,9 +39,8 @@ public class DataManager : Singleton<DataManager>
                 return ObjectType.Axe;
             case WeaponType.Candy:
                 return ObjectType.Candy;
-            // Thêm các loại vũ khí khác nếu cần
             default:
-                return ObjectType.Axe; // Một loại mặc định nếu cần
+                return ObjectType.Axe;
         }
     }
     public PlayerData GetPlayerData()
